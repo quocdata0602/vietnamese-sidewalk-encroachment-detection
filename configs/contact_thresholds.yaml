@@ -1,0 +1,60 @@
+# contact_band_ratio:
+# Tỷ lệ chiều cao ở phần dưới cùng của bbox được lấy ra làm "vùng tiếp xúc".
+#
+# Cách tính:
+#   chiều cao vùng tiếp xúc = chiều cao bbox × contact_band_ratio
+#
+# Ví dụ:
+#   bbox xe cao 200 pixel, car = 0.15
+#   → lấy 200 × 0.15 = 30 pixel ở dưới cùng của bbox để kiểm tra.
+#
+# Giá trị nhỏ:
+#   Chỉ kiểm tra một dải mỏng sát chân vật thể.
+#
+# Giá trị lớn:
+#   Kiểm tra một vùng cao hơn ở phần dưới bbox.
+contact_band_ratios:
+  ad_board: 0.35
+  bin: 0.45
+  car: 0.15
+  motorbike: 0.12
+  table_chair: 0.40
+  umbrella: 0.25
+  vendor_cart: 0.40
+
+
+# contact_threshold:
+# Ngưỡng tối thiểu của tỷ lệ sidewalk bên trong vùng tiếp xúc phía dưới bbox.
+#
+# Chỉ số được tính như sau:
+#
+#   contact_overlap_ratio
+#     = số pixel sidewalk trong vùng tiếp xúc
+#       / tổng số pixel của vùng tiếp xúc
+#
+# Ví dụ:
+#   Vùng tiếp xúc của car có 1.000 pixel.
+#   Trong đó có 300 pixel thuộc sidewalk.
+#
+#   contact_overlap_ratio = 300 / 1.000 = 0.30
+#
+#   Vì car có threshold = 0.25:
+#   0.30 >= 0.25 → đạt điều kiện contact.
+#
+# Giá trị threshold nhỏ:
+#   Dễ chấp nhận object hơn, nhưng có thể tăng false positive.
+#
+# Giá trị threshold lớn:
+#   Yêu cầu object tiếp xúc sidewalk rõ hơn, nhưng có thể bỏ sót object.
+#
+# Lưu ý:
+# Đây là ngưỡng kiểm tra vùng đáy theo từng class.
+# Nó không phải Sidewalk Overlap Ratio 0.05 dùng chung cho toàn bộ bbox.
+contact_thresholds:
+  ad_board: 0.05
+  bin: 0.08
+  car: 0.25
+  motorbike: 0.22
+  table_chair: 0.08
+  umbrella: 0.03
+  vendor_cart: 0.10

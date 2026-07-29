@@ -1,0 +1,82 @@
+# class_weight:
+# Trọng số thể hiện mức ảnh hưởng của từng loại vật thể
+# đối với Object Score.
+#
+# Điểm đóng góp của một object được tính:
+#
+#   object_contribution
+#     = 0.5
+#       × class_weight
+#       × confidence
+#       × sidewalk_overlap_ratio
+#
+# Trong đó:
+#   class_weight:
+#     Mức ảnh hưởng do người thiết kế hệ thống quy định.
+#
+#   confidence:
+#     Độ tin cậy của model đối với detection.
+#
+#   sidewalk_overlap_ratio:
+#     Tỷ lệ toàn bộ bbox nằm trên sidewalk.
+#
+# Trọng số lớn:
+#   Object làm điểm lấn chiếm tăng nhiều hơn.
+#
+# Trọng số nhỏ:
+#   Object ảnh hưởng ít hơn đến điểm tổng.
+#
+# Ví dụ:
+#   vendor_cart có:
+#     weight = 2.0
+#     confidence = 0.80
+#     sidewalk_overlap_ratio = 0.50
+#
+#   contribution = 0.5 × 2.0 × 0.80 × 0.50 = 0.40
+default_class_weights:
+  ad_board: 1.0
+  bin: 0.8
+  car: 1.5
+  motorbike: 1.5
+  table_chair: 0.05
+  umbrella: 1.0
+  vendor_cart: 2.0
+
+
+# class_conf_threshold:
+# Confidence tối thiểu mà detection của từng class phải đạt
+# để được tiếp tục kiểm tra.
+#
+# Confidence là độ chắc chắn của model, thường nằm từ 0 đến 1.
+#
+# Ví dụ:
+#   Model phát hiện car với confidence = 0.70.
+#   Threshold của car = 0.64.
+#
+#   0.70 >= 0.64 → detection được kiểm tra tiếp.
+#
+# Nếu confidence = 0.60:
+#   0.60 < 0.64 → detection bị loại.
+#
+# Threshold nhỏ:
+#   Giữ lại nhiều detection hơn, tăng Recall nhưng có thể tăng false positive.
+#
+# Threshold lớn:
+#   Chỉ giữ detection chắc chắn hơn, nhưng có thể bỏ sót object.
+#
+# Lưu ý:
+# Vượt confidence threshold chưa có nghĩa là object được cộng điểm.
+# Object còn phải vượt qua các kiểm tra:
+#   - overlap với sidewalk;
+#   - contact ở vùng đáy;
+#   - bottom-center;
+#   - road context;
+#   - duplicate suppression.
+default_class_conf_thresholds:
+  ad_board: 0.30
+  bin: 0.30
+  car: 0.30
+  motorbike: 0.3
+  table_chair: 0.30
+  umbrella: 0.30
+  vendor_cart: 0.30

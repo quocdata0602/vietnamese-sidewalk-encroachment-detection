@@ -1,0 +1,79 @@
+# component_area_ratio:
+# Tỷ lệ diện tích của một vùng sidewalk rời rạc
+# so với tổng diện tích ảnh.
+#
+# Cách tính:
+#
+#   component_ratio
+#     = diện tích vùng sidewalk
+#       / diện tích toàn ảnh
+#
+# Giá trị 0.001 tương đương 0.1% diện tích ảnh.
+#
+# Ví dụ:
+#   Ảnh có kích thước 1.000 × 1.000
+#   → tổng diện tích = 1.000.000 pixel.
+#
+#   1.000.000 × 0.001 = 1.000 pixel.
+#
+#   Vùng sidewalk nhỏ hơn 1.000 pixel sẽ bị xem là nhiễu.
+#
+# Trong code, ngưỡng thực tế không bao giờ nhỏ hơn 64 pixel:
+#
+#   min_area = max(64, image_area × ratio)
+sidewalk_min_component_ratio: 0.001
+
+
+# close_kernel_ratio:
+# Tỷ lệ dùng để tính kích thước kernel cho phép toán
+# morphological closing.
+#
+# Closing dùng để lấp các lỗ hoặc khe hở nhỏ trong sidewalk mask.
+#
+# Cách tính:
+#
+#   kernel_size
+#     = cạnh ngắn hơn của ảnh × close_kernel_ratio
+#
+# Sau đó:
+#   - tối thiểu là 3 pixel;
+#   - được điều chỉnh thành số lẻ.
+#
+# Ví dụ:
+#   Ảnh có kích thước 1.280 × 720.
+#   Cạnh ngắn hơn là 720.
+#
+#   720 × 0.01 = 7.2
+#   → kernel thực tế khoảng 7 × 7 pixel.
+#
+# Giá trị lớn:
+#   Lấp được khe lớn hơn, nhưng có nguy cơ nối nhầm các vùng riêng biệt.
+#
+# Giá trị nhỏ:
+#   Chỉ lấp các khe rất nhỏ.
+sidewalk_close_kernel_ratio: 0.01
+
+
+# hull_expansion:
+# Giới hạn diện tích được phép tăng khi dùng convex hull
+# để lấp vùng sidewalk bị vật thể che khuất.
+#
+# Cách kiểm tra:
+#
+#   hull_area
+#     <= component_area × sidewalk_max_hull_expansion
+#
+# Ví dụ:
+#   Vùng sidewalk ban đầu có diện tích 10.000 pixel.
+#   Giá trị expansion = 1.5.
+#
+#   Convex hull chỉ được chấp nhận nếu:
+#   hull_area <= 15.000 pixel.
+#
+# Nếu hull_area lớn hơn 15.000 pixel:
+#   chương trình giữ vùng mask ban đầu,
+#   tránh mở rộng sidewalk quá nhiều sang road.
+#
+# Giá trị 1.5 nghĩa là convex hull được phép có diện tích
+# tối đa bằng 150% diện tích vùng sidewalk ban đầu.
+sidewalk_max_hull_expansion: 1.5

@@ -1,0 +1,97 @@
+# Các class được kiểm tra bbox trùng.
+#
+# Bbox trùng xảy ra khi model phát hiện cùng một vật thể nhiều lần.
+# Chương trình giữ bbox có độ ưu tiên cao hơn và loại bbox còn lại.
+duplicate_suppress_classes:
+  - ad_board
+  - bin
+  - car
+  - motorbike
+  - table_chair
+  - umbrella
+  - vendor_cart
+
+
+# IoU - Intersection over Union:
+# Đo mức độ chồng lấn giữa hai bbox.
+#
+# Cách tính:
+#
+#   IoU = diện tích phần giao
+#         / diện tích phần hợp của hai bbox
+#
+# Khoảng giá trị:
+#   0.00 → hai bbox không chồng nhau.
+#   1.00 → hai bbox trùng hoàn toàn.
+#
+# Ví dụ:
+#   Hai bbox car có IoU = 0.26.
+#   Threshold của car = 0.20.
+#
+#   0.26 >= 0.20
+#   → xem là hai detection của cùng một object.
+#
+# Threshold nhỏ:
+#   Loại duplicate mạnh tay hơn.
+#
+# Threshold lớn:
+#   Chỉ loại những bbox chồng nhau rất nhiều.
+duplicate_iou_thresholds:
+  ad_board: 0.25
+  bin: 0.25
+  car: 0.20
+  motorbike: 0.20
+  table_chair: 0.25
+  umbrella: 0.25
+  vendor_cart: 0.20
+
+
+# Containment ratio:
+# Đo xem bbox nhỏ nằm bên trong bbox lớn nhiều đến mức nào.
+#
+# Cách tính:
+#
+#   containment
+#     = diện tích phần giao của hai bbox
+#       / diện tích bbox nhỏ hơn
+#
+# Ví dụ:
+#   Bbox nhỏ có diện tích 1.000 pixel.
+#   Phần giao với bbox lớn là 600 pixel.
+#
+#   containment = 600 / 1.000 = 0.60
+#
+#   0.60 >= 0.45 → đạt điều kiện containment.
+#
+# Chỉ số này hữu ích khi một bbox nhỏ nằm trong bbox lớn,
+# nhưng IoU không cao vì bbox lớn có diện tích lớn hơn nhiều.
+duplicate_containment_threshold: 0.45
+
+
+# Normalized center distance:
+# Đo khoảng cách giữa tâm hai bbox sau khi chuẩn hóa theo kích thước bbox.
+#
+# Cách tính gần đúng:
+#
+#   center_distance
+#     = khoảng cách giữa hai tâm bbox
+#       / đường chéo của bbox lớn hơn
+#
+# Giá trị nhỏ:
+#   Hai tâm bbox nằm gần nhau.
+#
+# Giá trị lớn:
+#   Hai bbox có khả năng là hai object khác nhau.
+#
+# Ví dụ:
+#   center distance = 0.40
+#   threshold = 0.55
+#
+#   0.40 <= 0.55 → hai tâm đủ gần.
+#
+# Điều kiện này không hoạt động độc lập.
+# Hai bbox được xem là trùng theo nhánh này khi:
+#
+#   containment >= 0.45
+#   VÀ center_distance <= 0.55
+duplicate_center_distance_threshold: 0.55

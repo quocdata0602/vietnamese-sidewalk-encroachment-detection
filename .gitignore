@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Dataset: chỉ up README
+datasets/*
+!datasets/README.md
+
+# Không up model
+models/*
+!models/README.md
+
+# Không up ảnh thực nghiệm
+experiments/input/experiment_images/
+experiments/input/threshold_images/
+
+# Không up kết quả chạy
+experiments/output/
+outputs/
+
+# Không up ảnh mẫu lúc này
+sample_images/
+
+# Không up file upload tạm
+temp_uploads/
+
+# Environment
+.env
+.env.*
+
+# System files
+.DS_Store
+Thumbs.db
